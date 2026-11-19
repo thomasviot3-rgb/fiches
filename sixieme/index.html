@@ -85,6 +85,7 @@ table.br tr:nth-child(odd) td{background:#f2f5fa}
 .pn .b{min-width:0}
 .pgap{height:6mm}
 /* corrigé (enseignant) */
+#tg kbd{margin-left:.4em;font:700 .85em system-ui;border:1.5px solid currentColor;border-radius:4px;padding:0 .35em;opacity:.85}
 #tg{position:fixed;right:10px;top:10px;z-index:9;padding:7px 12px;border:0;border-radius:8px;background:var(--accent);color:#fff;font:600 13px system-ui;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 body.corrige .b::after{content:attr(data-a);position:absolute;left:0;right:0;bottom:1px;text-align:center;color:#c0392b;font:600 .88em "Chalkboard SE","Bradley Hand",cursive;white-space:nowrap}
 body.corrige .w.x{text-decoration:line-through;opacity:.45}
@@ -208,7 +209,7 @@ table.br td{height:7.3mm}table.br{margin:1.5mm 0}
 .warn,.entry{border-left-color:#836400}
 </style></head>
 <body>
-<button id="tg" type="button">Afficher le corrigé</button>
+<button id="tg" type="button" aria-keyshortcuts="C">Afficher le corrigé <kbd title="Raccourci : touche C">C</kbd></button>
 <section class="sheet" id="s1">
 <header class="top"><div class="kick">Éducation musicale · 6<sup>e</sup></div>
   <h1>Les instruments de l’orchestre symphonique</h1></header>
@@ -281,7 +282,7 @@ table.br td{height:7.3mm}table.br{margin:1.5mm 0}
 <footer><span>padlet.com/6STM/instruments</span><span>4 / 4</span></footer></section>
 <script>
 (function(){var b=document.body,t=document.getElementById('tg'),busy=0,w=0;
-function set(o){b.classList.toggle('corrige',o);t.textContent=o?'Masquer le corrigé':'Afficher le corrigé';}
+function set(o){b.classList.toggle('corrige',o);t.innerHTML=(o?'Masquer le corrigé':'Afficher le corrigé')+' <kbd title="Raccourci : touche C">C</kbd>';}
 function els(){return[].slice.call(document.querySelectorAll('.b,.ans'));}
 function max(){var d=document.documentElement;return Math.max(1,d.scrollHeight-d.clientHeight);}
 // Dans l'appli Chant : la fiche envoie son état (blancs révélés, corrigé, défilement) et reprend celui du Mac/téléphone.
@@ -290,6 +291,7 @@ function emit(){if(busy||parent===window)return;
     corrige:b.classList.contains('corrige'),f:window.scrollY/max()},'*');}
 document.addEventListener('click',function(e){var x=e.target.closest('.b,.ans');if(x){x.classList.toggle('rev');emit();}});
 t.onclick=function(){set(!b.classList.contains('corrige'));emit();};
+document.addEventListener('keydown',function(e){if((e.key==='c'||e.key==='C')&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!e.target.closest('input,textarea')){e.preventDefault();t.click();}});
 window.addEventListener('scroll',function(){if(!w)w=setTimeout(function(){w=0;emit();},60);},{passive:true});
 window.addEventListener('message',function(e){var d=e.data;if(!d||d.chant!=='fiche')return;
   busy=1;els().forEach(function(x,i){x.classList.toggle('rev',d.rev.indexOf(i)>=0);});set(!!d.corrige);window.scrollTo(0,d.f*max());
